@@ -22,21 +22,14 @@ if (!rawCity) {
   process.exit(1);
 }
 
-const apiKey = process.env.GOOGLE_API_KEY;
-
-if (!apiKey) {
-  console.error('[updatePlaces] La variable d\'environnement GOOGLE_API_KEY est requise.');
-  process.exit(1);
-}
-
 try {
-  await updateCityPlaces(rawCity, rawCountry, apiKey);
+  await updateCityPlaces(rawCity, rawCountry);
 } catch (error) {
   console.error(`[updatePlaces] Échec de la synchronisation : ${error.message}`);
   process.exitCode = 1;
 }
 
-async function updateCityPlaces(cityArg, countryArg, key) {
+async function updateCityPlaces(cityArg, countryArg) {
   const dataBuffer = await fs.readFile(CITIES_PATH, 'utf8');
   const cities = JSON.parse(dataBuffer);
 
@@ -61,17 +54,20 @@ async function updateCityPlaces(cityArg, countryArg, key) {
 
   targetCity.experiences ??= [];
 
-  const query = buildSearchQuery(cityArg, countryArg);
-  console.log(`[updatePlaces] Recherche de nouvelles expériences pour ${targetCity.name} (${query}).`);
+  const locationLabel = buildLocationLabel(cityArg, countryArg);
+  console.log(
+    `[updatePlaces] Recherche de nouvelles expériences pour ${targetCity.name} via Overpass (${locationLabel}).`
+  );
 
-  const searchResults = await searchPlaces(query, key);
-  if (!searchResults.length) {
-    console.log('[updatePlaces] Aucun résultat retourné par Google Places.');
+  const query = buildOverpassQuery(cityArg, countryArg);
+  const overpassElements = await requestOverpassData(query);
+
+  if (!overpassElements.length) {
+    console.log('[updatePlaces] Aucun résultat retourné par Overpass.');
     return;
   }
 
-  const details = await fetchPlaceDetails(searchResults, key);
-  const summary = mergeExperiences(targetCity, details, key);
+  const summary = mergeExperiences(targetCity, overpassElements);
 
   targetCity.experiences.sort((a, b) => a.title.localeCompare(b.title, 'fr', { sensitivity: 'base' }));
 
@@ -85,81 +81,70 @@ async function updateCityPlaces(cityArg, countryArg, key) {
   }
 }
 
-async function searchPlaces(query, key) {
-  const url = new URL('https://maps.googleapis.com/maps/api/place/textsearch/json');
-  url.search = new URLSearchParams({
-    query,
-    key,
-    language: 'fr'
-  }).toString();
+async function requestOverpassData(query) {
+  let response;
+  try {
+    response = await fetchApi('https://overpass-api.de/api/interpreter', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        Accept: 'application/json',
+        'User-Agent': 'escapedia-updatePlaces/1.0 (+https://openstreetmap.org)'
+      },
+      body: `data=${encodeURIComponent(query)}`
+    });
+  } catch (error) {
+    throw new Error(`Requête Overpass indisponible : ${error.message}`, { cause: error });
+  }
 
-  const response = await fetchApi(url);
   if (!response.ok) {
-    throw new Error(`Requête textsearch échouée (${response.status} ${response.statusText}).`);
+    let detail = '';
+    try {
+      const text = await response.text();
+      if (text && text.trim().length) {
+        detail = ` : ${text.trim()}`;
+      }
+    } catch (error) {
+      // Ignore body parsing errors and keep the HTTP status message only.
+    }
+    throw new Error(`Requête Overpass échouée (${response.status} ${response.statusText})${detail}`);
   }
 
   const payload = await response.json();
-  if (payload.error_message) {
-    throw new Error(payload.error_message);
-  }
-
-  if (!Array.isArray(payload.results)) {
+  if (!Array.isArray(payload.elements)) {
     return [];
   }
 
-  return payload.results;
+  return payload.elements;
 }
 
-async function fetchPlaceDetails(places, key) {
-  const details = [];
-  for (const place of places) {
-    try {
-      const data = await getPlaceDetail(place.place_id, key);
-      details.push(data);
-    } catch (error) {
-      console.error(`[updatePlaces] Échec lors de la récupération du lieu ${place.name} : ${error.message}`);
-    }
-  }
-  return details;
-}
-
-async function getPlaceDetail(placeId, key) {
-  const url = new URL('https://maps.googleapis.com/maps/api/place/details/json');
-  url.search = new URLSearchParams({
-    place_id: placeId,
-    key,
-    language: 'fr',
-    fields:
-      'place_id,name,formatted_address,geometry/location,rating,user_ratings_total,editorial_summary,business_status,photos,types,website'
-  }).toString();
-
-  const response = await fetchApi(url);
-  if (!response.ok) {
-    throw new Error(`Requête details échouée (${response.status} ${response.statusText}).`);
-  }
-
-  const payload = await response.json();
-  if (payload.error_message) {
-    throw new Error(payload.error_message);
-  }
-
-  if (payload.status !== 'OK' || !payload.result) {
-    throw new Error(`Statut inattendu retourné par l'API : ${payload.status ?? 'inconnu'}.`);
-  }
-
-  return payload.result;
-}
-
-function mergeExperiences(targetCity, placeDetails, apiKey) {
+function mergeExperiences(targetCity, overpassElements) {
   const summary = { added: 0, updated: 0, titles: [] };
-  for (const detail of placeDetails) {
-    const identifier = detail.place_id;
-    const index = targetCity.experiences.findIndex(
-      (experience) => experience.placeId === identifier || experience.id === slugify(detail.name)
-    );
+  for (const element of overpassElements) {
+    const tags = element.tags ?? {};
+    const name = tags.name?.trim();
+    if (!name) {
+      continue;
+    }
+
+    const identifier = buildPlaceIdentifier(element);
+    const osmUrl = buildOpenStreetMapUrl(element);
+    const slug = slugify(name);
+
+    const index = targetCity.experiences.findIndex((experience) => {
+      return (
+        experience.placeId === identifier ||
+        experience.id === slug ||
+        experience.source?.url === osmUrl
+      );
+    });
 
     const previous = index >= 0 ? targetCity.experiences[index] : undefined;
-    const next = buildExperience(detail, previous, targetCity, apiKey);
+    const next = buildExperience(element, previous, targetCity);
+
+    if (!next) {
+      continue;
+    }
 
     if (index >= 0) {
       targetCity.experiences[index] = next;
@@ -174,39 +159,55 @@ function mergeExperiences(targetCity, placeDetails, apiKey) {
   return summary;
 }
 
-function buildExperience(detail, previous = {}, city, apiKey) {
-  const photoReference = detail.photos?.[0]?.photo_reference;
-  const photoUrl = photoReference ? buildPhotoUrl(photoReference, apiKey) : previous.imageUrl ?? previous.image ?? city.heroImage;
+function buildExperience(element, previous = {}, city) {
+  const tags = element.tags ?? {};
+  const name = tags.name ?? previous.title;
+  if (!name) {
+    return null;
+  }
+
+  const identifier = buildPlaceIdentifier(element);
+  const osmUrl = buildOpenStreetMapUrl(element);
+  const { labels: typeLabels, values: typeValues } = extractTypes(tags);
+  const coordinates = buildCoordinates(element);
+  const address = buildAddress(tags);
+  const website = tags.website ?? tags['contact:website'] ?? tags.url ?? previous.website ?? null;
+  const description = tags.description ?? tags.note ?? previous.description ?? null;
   const retrievedAt = new Date().toISOString().slice(0, 7);
+  const image = previous.imageUrl ?? previous.image ?? city.heroImage ?? null;
+  const previousTypes = Array.isArray(previous.types) ? previous.types : [];
+  const types = typeLabels.length ? typeLabels : previousTypes;
+
+  const sourceUrl = osmUrl ?? previous.source?.url ?? null;
 
   const experience = {
-    id: previous.id ?? slugify(detail.name),
-    title: detail.name,
-    category: previous.category ?? inferCategory(detail.types),
+    id: previous.id ?? slugify(name),
+    title: name,
+    category: previous.category ?? inferCategory(typeValues),
     duration: previous.duration ?? null,
-    description: detail.editorial_summary?.overview ?? previous.description ?? null,
-    image: photoUrl,
-    imageUrl: photoUrl,
-    placeId: detail.place_id,
-    address: detail.formatted_address ?? previous.address ?? null,
-    latitude: detail.geometry?.location?.lat ?? previous.latitude ?? null,
-    longitude: detail.geometry?.location?.lng ?? previous.longitude ?? null,
-    rating: detail.rating ?? previous.rating ?? null,
-    ratingsTotal: detail.user_ratings_total ?? previous.ratingsTotal ?? null,
-    status: formatStatus(detail.business_status) ?? previous.status ?? null,
-    website: detail.website ?? previous.website,
+    description,
+    image,
+    imageUrl: image,
+    placeId: identifier,
+    address: address ?? previous.address ?? null,
+    latitude: coordinates.lat ?? previous.latitude ?? null,
+    longitude: coordinates.lon ?? previous.longitude ?? null,
+    rating: previous.rating ?? null,
+    ratingsTotal: previous.ratingsTotal ?? null,
+    status: previous.status ?? null,
+    website,
+    types,
     source: {
-      name: 'Google Maps',
-      url: `https://www.google.com/maps/place/?q=place_id:${detail.place_id}`,
+      name: 'OpenStreetMap (Overpass)',
+      url: sourceUrl,
       retrievedAt
     }
   };
 
   if (previous.source) {
     experience.source = {
+      ...previous.source,
       ...experience.source,
-      name: previous.source.name ?? experience.source.name,
-      url: previous.source.url ?? experience.source.url,
       retrievedAt: experience.source.retrievedAt ?? previous.source.retrievedAt ?? retrievedAt
     };
   }
@@ -214,29 +215,108 @@ function buildExperience(detail, previous = {}, city, apiKey) {
   return experience;
 }
 
-function buildPhotoUrl(reference, key) {
-  const params = new URLSearchParams({
-    maxwidth: '1600',
-    photoreference: reference,
-    key
-  });
-  return `https://maps.googleapis.com/maps/api/place/photo?${params.toString()}`;
-}
-
-function buildSearchQuery(city, country) {
+function buildLocationLabel(city, country) {
   const trimmedCity = city.trim();
   const trimmedCountry = country ? country.trim() : '';
-  const location = trimmedCountry ? `${trimmedCity}, ${trimmedCountry}` : trimmedCity;
-  return `${location} points of interest`;
+  return trimmedCountry ? `${trimmedCity}, ${trimmedCountry}` : trimmedCity;
+}
+
+function buildOverpassQuery(city, country) {
+  const location = buildLocationLabel(city, country);
+  const categories = ['tourism', 'amenity', 'leisure', 'historic', 'shop', 'sport', 'natural'];
+  const selectors = categories
+    .map((category) => [`  node["${category}"](area.searchArea);`, `  way["${category}"](area.searchArea);`, `  relation["${category}"](area.searchArea);`])
+    .flat();
+
+  const sanitizedLocation = location.replace(/[\n\r]+/g, ' ').trim();
+
+  return [
+    '[out:json][timeout:25];',
+    `{{geocodeArea:${sanitizedLocation}}}->.searchArea;`,
+    '(',
+    selectors.join('\n'),
+    ');',
+    'out center 40;'
+  ].join('\n');
+}
+
+function extractTypes(tags = {}) {
+  const interestingKeys = ['tourism', 'amenity', 'leisure', 'historic', 'shop', 'sport', 'natural', 'craft'];
+  const labels = new Set();
+  const values = new Set();
+
+  for (const key of interestingKeys) {
+    const raw = tags[key];
+    if (!raw || typeof raw !== 'string') {
+      continue;
+    }
+    const parts = raw
+      .split(';')
+      .map((part) => part.trim())
+      .filter(Boolean);
+
+    for (const part of parts) {
+      labels.add(`${key}:${part}`);
+      values.add(part.toLowerCase());
+    }
+  }
+
+  return {
+    labels: Array.from(labels),
+    values: Array.from(values)
+  };
 }
 
 function inferCategory(types = []) {
   const normalizedTypes = types.map((type) => type.toLowerCase());
   const priorities = [
-    { types: ['museum', 'art_gallery', 'tourist_attraction'], category: 'Culture' },
-    { types: ['restaurant', 'cafe', 'bakery', 'bar'], category: 'Gastronomie' },
-    { types: ['park', 'natural_feature', 'campground'], category: 'Nature' },
-    { types: ['spa', 'gym', 'lodging'], category: 'Bien-être' }
+    {
+      types: [
+        'museum',
+        'art_gallery',
+        'theatre',
+        'cinema',
+        'arts_centre',
+        'attraction',
+        'viewpoint',
+        'heritage',
+        'monument',
+        'castle',
+        'ruins',
+        'zoo',
+        'theme_park',
+        'aquarium'
+      ],
+      category: 'Culture'
+    },
+    {
+      types: ['restaurant', 'cafe', 'bakery', 'bar', 'pub', 'food_court', 'fast_food', 'ice_cream', 'winery', 'brewery'],
+      category: 'Gastronomie'
+    },
+    {
+      types: [
+        'park',
+        'garden',
+        'nature_reserve',
+        'protected_area',
+        'beach',
+        'forest',
+        'wood',
+        'meadow',
+        'water',
+        'waterfall',
+        'peak',
+        'camp_site',
+        'picnic_site',
+        'trailhead',
+        'swimming_area'
+      ],
+      category: 'Nature'
+    },
+    {
+      types: ['spa', 'sauna', 'gym', 'fitness_centre', 'wellness', 'swimming_pool', 'thermal_bath'],
+      category: 'Bien-être'
+    }
   ];
 
   for (const { types: candidates, category } of priorities) {
@@ -248,17 +328,43 @@ function inferCategory(types = []) {
   return 'Découverte';
 }
 
-function formatStatus(status) {
-  switch (status) {
-    case 'OPERATIONAL':
-      return 'Ouvert actuellement';
-    case 'CLOSED_TEMPORARILY':
-      return 'Fermeture temporaire';
-    case 'CLOSED_PERMANENTLY':
-      return 'Fermeture permanente';
-    default:
-      return status ?? null;
+function buildAddress(tags = {}) {
+  if (typeof tags['addr:full'] === 'string' && tags['addr:full'].trim()) {
+    return tags['addr:full'].trim();
   }
+
+  const street = [tags['addr:housenumber'], tags['addr:street']].filter(Boolean).join(' ').trim();
+  const cityLine = [tags['addr:postcode'], tags['addr:city']].filter(Boolean).join(' ').trim();
+  const country = typeof tags['addr:country'] === 'string' ? tags['addr:country'].trim() : '';
+
+  const segments = [street, cityLine, country].filter((segment) => segment && segment.length);
+  return segments.length ? segments.join(', ') : null;
+}
+
+function buildCoordinates(element = {}) {
+  if (typeof element.lat === 'number' && typeof element.lon === 'number') {
+    return { lat: element.lat, lon: element.lon };
+  }
+
+  if (element.center && typeof element.center.lat === 'number' && typeof element.center.lon === 'number') {
+    return { lat: element.center.lat, lon: element.center.lon };
+  }
+
+  return { lat: null, lon: null };
+}
+
+function buildOpenStreetMapUrl(element = {}) {
+  if (!element.type || typeof element.id === 'undefined') {
+    return null;
+  }
+  return `https://www.openstreetmap.org/${element.type}/${element.id}`;
+}
+
+function buildPlaceIdentifier(element = {}) {
+  if (!element.type || typeof element.id === 'undefined') {
+    return null;
+  }
+  return `osm:${element.type}/${element.id}`;
 }
 
 function slugify(value) {
