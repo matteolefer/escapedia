@@ -125,19 +125,128 @@
 
 .experience-card {
   display: grid;
-  gap: var(--space-md);
+  gap: var(--space-lg);
   background: var(--color-surface);
   padding: var(--space-xl);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
 }
 
+.experience-card__image {
+  width: 100%;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  aspect-ratio: 16 / 9;
+  box-shadow: var(--shadow-sm);
+}
+
+.experience-card__header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-sm);
+}
+
+.experience-card__status {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: var(--space-2xs) var(--space-sm);
+  border-radius: 999px;
+  background: rgba(107, 114, 128, 0.12);
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.experience-card__status--success {
+  background: rgba(47, 158, 68, 0.12);
+  color: var(--color-success);
+}
+
+.experience-card__status--warning {
+  background: rgba(255, 107, 107, 0.12);
+  color: var(--color-accent);
+}
+
 .experience-card__meta {
   display: flex;
   gap: var(--space-sm);
   flex-wrap: wrap;
-  color: var(--color-muted);
+}
+
+.experience-card__meta-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2xs);
+  padding: var(--space-2xs) var(--space-sm);
+  border-radius: 999px;
+  background: rgba(11, 114, 133, 0.08);
   font-size: var(--text-sm);
+}
+
+.experience-card__meta-item--placeholder {
+  background: rgba(107, 114, 128, 0.1);
+}
+
+.experience-card__meta-label {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+}
+
+.experience-card__meta-label::after {
+  content: ':';
+  margin-left: var(--space-2xs);
+}
+
+.experience-card__meta-value {
+  font-weight: 600;
+  color: var(--color-primary-strong);
+}
+
+.experience-card__meta-value--placeholder {
+  color: var(--color-muted);
+  font-weight: 500;
+}
+
+.experience-card__details {
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(0, auto) 1fr;
+  gap: var(--space-xs) var(--space-md);
+  font-size: var(--text-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-border);
+}
+
+.experience-card__details dt {
+  margin: 0;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.experience-card__details dd {
+  margin: 0;
+  color: var(--color-on-surface);
+  font-weight: 500;
+}
+
+.experience-card__details-value--placeholder {
+  color: var(--color-muted);
+  font-weight: 400;
+}
+
+.experience-card__map-link {
+  color: var(--color-primary-strong);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.experience-card__map-link:hover,
+.experience-card__map-link:focus {
+  text-decoration: underline;
 }
 
 .reviews-grid {

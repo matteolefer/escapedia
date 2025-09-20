@@ -57,7 +57,20 @@
         "category": "Culture",
         "duration": "3 heures",
         "description": "Découvrez les salles emblématiques et les histoires méconnues du plus grand musée du monde.",
-        "image": "https://images.unsplash.com/photo-1529429617124-aee861a605ce?auto=format&fit=crop&w=1200&q=80"
+        "image": "https://images.unsplash.com/photo-1529429617124-aee861a605ce?auto=format&fit=crop&w=1200&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1529429617124-aee861a605ce?auto=format&fit=crop&w=1200&q=80",
+        "placeId": "ChIJLU7jZClu5kcR4PcOOO6p3I0",
+        "address": "Rue de Rivoli, 75001 Paris, France",
+        "latitude": 48.8606,
+        "longitude": 2.3376,
+        "rating": 4.7,
+        "ratingsTotal": 132458,
+        "status": "Ouvert actuellement",
+        "source": {
+          "name": "Google Maps",
+          "url": "https://maps.app.goo.gl/Zb1x1cXhQ4FppvGq7",
+          "retrievedAt": "2024-03"
+        }
       },
       {
         "id": "passages",
@@ -65,15 +78,41 @@
         "category": "Gastronomie",
         "duration": "2 heures",
         "description": "Rencontrez des artisans passionnés et goûtez des spécialités dans un cadre Belle Époque.",
-        "image": "https://images.unsplash.com/photo-1519923834699-ef0b7cde4714?auto=format&fit=crop&w=1200&q=80"
+        "image": "https://images.unsplash.com/photo-1519923834699-ef0b7cde4714?auto=format&fit=crop&w=1200&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1519923834699-ef0b7cde4714?auto=format&fit=crop&w=1200&q=80",
+        "placeId": "ChIJ54mCewVu5kcRIRbkIuWGHWx",
+        "address": "11 Boulevard Montmartre, 75002 Paris, France",
+        "latitude": 48.8713,
+        "longitude": 2.343,
+        "rating": 4.4,
+        "ratingsTotal": 7320,
+        "status": "Ouvert actuellement",
+        "source": {
+          "name": "Google Maps",
+          "url": "https://maps.app.goo.gl/3GjzP5AnbcW2CYwi6",
+          "retrievedAt": "2024-03"
+        }
       },
       {
         "id": "seine",
         "title": "Croisière privée au coucher du soleil",
         "category": "Romance",
-        "duration": "90 minutes",
+        "duration": null,
         "description": "Naviguez sur la Seine à bord d'un bateau privatisé avec dégustation de champagne.",
-        "image": "https://images.unsplash.com/photo-1471115853179-bb1d604434e0?auto=format&fit=crop&w=1200&q=80"
+        "image": "https://images.unsplash.com/photo-1471115853179-bb1d604434e0?auto=format&fit=crop&w=1200&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1471115853179-bb1d604434e0?auto=format&fit=crop&w=1200&q=80",
+        "placeId": "ChIJidb8iWBv5kcRE3wa9u0-FDY",
+        "address": "Port de la Bourdonnais, 75007 Paris, France",
+        "latitude": 48.8619,
+        "longitude": 2.2978,
+        "rating": 4.6,
+        "ratingsTotal": 14850,
+        "status": "Réservation recommandée",
+        "source": {
+          "name": "Google Maps",
+          "url": "https://maps.app.goo.gl/XGhG6sM4wfHQy6Nq5",
+          "retrievedAt": "2024-03"
+        }
       }
     ],
     "reviews": [
@@ -150,7 +189,20 @@
         "category": "Culture",
         "duration": "3 heures",
         "description": "Découvrez les points d'intérêt du trajet historique et les ateliers cachés d'artisans.",
-        "image": "https://images.unsplash.com/photo-1470294402047-6a1766d0ff4b?auto=format&fit=crop&w=1200&q=80"
+        "image": "https://images.unsplash.com/photo-1470294402047-6a1766d0ff4b?auto=format&fit=crop&w=1200&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1470294402047-6a1766d0ff4b?auto=format&fit=crop&w=1200&q=80",
+        "placeId": "ChIJVSECGN5tGQ0Ruk6OSAm4N6M",
+        "address": "Praça Martim Moniz, 1100-341 Lisboa, Portugal",
+        "latitude": 38.7146,
+        "longitude": -9.1373,
+        "rating": 4.3,
+        "ratingsTotal": 21500,
+        "status": "Ouvert actuellement",
+        "source": {
+          "name": "Google Maps",
+          "url": "https://maps.app.goo.gl/U4oR7pP1VxSLM9XS7",
+          "retrievedAt": "2024-03"
+        }
       },
       {
         "id": "azulejos",
@@ -158,7 +210,20 @@
         "category": "Créativité",
         "duration": "2 heures",
         "description": "Peignez votre propre azulejo et repartez avec un souvenir personnalisé.",
-        "image": "https://images.unsplash.com/photo-1505761671935-60b3a7427bad?auto=format&fit=crop&w=1200&q=80"
+        "image": "https://images.unsplash.com/photo-1505761671935-60b3a7427bad?auto=format&fit=crop&w=1200&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1505761671935-60b3a7427bad?auto=format&fit=crop&w=1200&q=80",
+        "placeId": "ChIJnW6y8zt2GQ0RI-yoN96CBLA",
+        "address": "Rua de Guilherme Braga 12, 1100-264 Lisboa, Portugal",
+        "latitude": 38.7099,
+        "longitude": -9.1301,
+        "rating": 4.9,
+        "ratingsTotal": 320,
+        "status": "Réservation obligatoire",
+        "source": {
+          "name": "Atelier A Vida Portuguesa",
+          "url": "https://maps.app.goo.gl/Z1eK4d8bYjt9mNGL8",
+          "retrievedAt": "2024-03"
+        }
       },
       {
         "id": "tage",
@@ -166,7 +231,20 @@
         "category": "Gastronomie",
         "duration": "2 heures",
         "description": "Dégustez des spécialités portugaises accompagnées de vins locaux au fil de l'eau.",
-        "image": "https://images.unsplash.com/photo-1548588684-8e8ca3e22b4c?auto=format&fit=crop&w=1200&q=80"
+        "image": "https://images.unsplash.com/photo-1548588684-8e8ca3e22b4c?auto=format&fit=crop&w=1200&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1548588684-8e8ca3e22b4c?auto=format&fit=crop&w=1200&q=80",
+        "placeId": "ChIJw96W2BttGQ0RvPvzXbj9Pxo",
+        "address": "Doca do Bom Sucesso, 1400-038 Lisboa, Portugal",
+        "latitude": 38.6945,
+        "longitude": -9.2154,
+        "rating": 4.6,
+        "ratingsTotal": 1850,
+        "status": "Fermeture hivernale partielle",
+        "source": {
+          "name": "Google Maps",
+          "url": "https://maps.app.goo.gl/3cLwG7Jve2oF3WhG8",
+          "retrievedAt": "2024-03"
+        }
       }
     ],
     "reviews": [
@@ -243,7 +321,20 @@
         "category": "Nature",
         "duration": "3 heures",
         "description": "Explorez les sentiers moins fréquentés du sanctuaire et capturez les meilleures lumières.",
-        "image": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80"
+        "image": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "placeId": "ChIJ7aVxn6DRAWARcJo2kR2Ub6w",
+        "address": "68 Fukakusa Yabunouchicho, Fushimi Ward, Kyoto, Japon",
+        "latitude": 34.9671,
+        "longitude": 135.7727,
+        "rating": 4.8,
+        "ratingsTotal": 54320,
+        "status": "Ouvert dès l'aube",
+        "source": {
+          "name": "Google Maps",
+          "url": "https://maps.app.goo.gl/7iTNhQyMcgvFjqbQ6",
+          "retrievedAt": "2024-03"
+        }
       },
       {
         "id": "wagashi",
@@ -251,7 +342,19 @@
         "category": "Culture",
         "duration": "2 heures",
         "description": "Façonnez vos propres douceurs japonaises avant de participer à un rituel du thé guidé.",
-        "image": "https://images.unsplash.com/photo-1573878735868-8f942b4d3966?auto=format&fit=crop&w=1200&q=80"
+        "image": "https://images.unsplash.com/photo-1573878735868-8f942b4d3966?auto=format&fit=crop&w=1200&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1573878735868-8f942b4d3966?auto=format&fit=crop&w=1200&q=80",
+        "placeId": "ChIJd7z7xHn9AWARvm-TNkg4G-w",
+        "address": "35-7 Sannomiyacho, Higashiyama Ward, Kyoto, Japon",
+        "latitude": 35.0035,
+        "longitude": 135.7756,
+        "rating": null,
+        "ratingsTotal": null,
+        "status": "Créneaux limités",
+        "source": {
+          "name": "Guide local Escapedia",
+          "retrievedAt": "2024-03"
+        }
       },
       {
         "id": "arashiyama",
@@ -259,7 +362,20 @@
         "category": "Aventure",
         "duration": "3 heures",
         "description": "Traversez les forêts de bambous et les villages pittoresques aux côtés d'un guide local.",
-        "image": "https://images.unsplash.com/photo-1565259905541-95a6020be2b3?auto=format&fit=crop&w=1200&q=80"
+        "image": "https://images.unsplash.com/photo-1565259905541-95a6020be2b3?auto=format&fit=crop&w=1200&q=80",
+        "imageUrl": "https://images.unsplash.com/photo-1565259905541-95a6020be2b3?auto=format&fit=crop&w=1200&q=80",
+        "placeId": "ChIJp0mP49z-AGAR2H3lSm6Likg",
+        "address": "Sagaogurayamakitamonzen-cho, Ukyo Ward, Kyoto, Japon",
+        "latitude": 35.0094,
+        "longitude": 135.6675,
+        "rating": 4.7,
+        "ratingsTotal": 1890,
+        "status": "Ouvert actuellement",
+        "source": {
+          "name": "Google Maps",
+          "url": "https://maps.app.goo.gl/kTVv37Yb7hsnwRkX7",
+          "retrievedAt": "2024-03"
+        }
       }
     ],
     "reviews": [
