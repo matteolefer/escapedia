@@ -1,0 +1,72 @@
+:root {
+  /* Color palette */
+  --color-primary: #0b7285;
+  --color-primary-strong: #085b6a;
+  --color-primary-soft: #96d0da;
+  --color-secondary: #f59f00;
+  --color-secondary-strong: #d48b00;
+  --color-secondary-soft: #ffe8a1;
+  --color-accent: #ff6b6b;
+  --color-success: #2f9e44;
+  --color-surface: #f5f9fc;
+  --color-background: #ffffff;
+  --color-on-primary: #ffffff;
+  --color-on-secondary: #1f1f1f;
+  --color-on-surface: #1f2933;
+  --color-muted: #6b7280;
+  --color-border: #d3dce6;
+  --shadow-color: rgba(11, 114, 133, 0.12);
+
+  /* Typography */
+  --font-heading: "Poppins", "Segoe UI", sans-serif;
+  --font-body: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Fira Code", monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 2.5rem;
+
+  /* Spacing scale */
+  --space-2xs: 0.125rem;
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 0.75rem;
+  --space-lg: 1rem;
+  --space-xl: 1.5rem;
+  --space-2xl: 2rem;
+  --space-3xl: 3rem;
+
+  /* Layout */
+  --radius-sm: 0.5rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.75rem;
+  --shadow-sm: 0 10px 30px rgba(15, 60, 80, 0.08);
+  --shadow-md: 0 15px 45px rgba(15, 60, 80, 0.12);
+  --shadow-focus: 0 0 0 3px rgba(11, 114, 133, 0.25);
+
+  /* Component sizing */
+  --container-max: 1200px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-primary: #4db3c8;
+    --color-primary-strong: #2a7f8f;
+    --color-primary-soft: #184650;
+    --color-secondary: #ffcc66;
+    --color-secondary-strong: #f5a623;
+    --color-secondary-soft: #5c471f;
+    --color-surface: #1f2a36;
+    --color-background: #151d26;
+    --color-on-primary: #0c1a21;
+    --color-on-secondary: #0c1a21;
+    --color-on-surface: #e3edf7;
+    --color-muted: #9caec0;
+    --color-border: rgba(255, 255, 255, 0.08);
+    --shadow-color: rgba(0, 0, 0, 0.25);
+  }
+}

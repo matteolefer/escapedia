@@ -1,0 +1,281 @@
+[
+  {
+    "slug": "paris",
+    "name": "Paris",
+    "country": "France",
+    "heroImage": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1600&q=80",
+    "summary": "Plongez dans la ville des Lumières entre patrimoine grandiose, gastronomie raffinée et vie de quartier foisonnante.",
+    "highlights": [
+      {
+        "title": "Chef-d'œuvres intemporels",
+        "description": "Du Louvre à l'Orangerie, explorez des collections majeures et des expositions temporaires audacieuses.",
+        "icon": "🎨"
+      },
+      {
+        "title": "Savoir-faire gastronomique",
+        "description": "Table étoilée, bistronomie ou street-food, Paris foisonne d'expériences culinaires à savourer.",
+        "icon": "🥐"
+      },
+      {
+        "title": "Balades inspirantes",
+        "description": "Flânez le long de la Seine, grimpez à Montmartre ou explorez les passages couverts pour une promenade inoubliable.",
+        "icon": "🚶"
+      }
+    ],
+    "quickFacts": [
+      { "label": "Population", "value": "2,1 M d'habitants" },
+      { "label": "Meilleure période", "value": "Avril à juin & septembre" },
+      { "label": "Budget journalier", "value": "€120 - €220" }
+    ],
+    "practical": [
+      {
+        "title": "Se déplacer",
+        "items": [
+          "Utilisez la carte Navigo Découverte pour des trajets illimités en métro, bus et tram.",
+          "Les itinéraires cyclables se multiplient : louez un Vélib' pour rayonner librement."
+        ]
+      },
+      {
+        "title": "Incontournables",
+        "items": [
+          "Réservez vos billets coupe-file pour la tour Eiffel ou le Louvre afin d'éviter l'attente.",
+          "Dégustez une pâtisserie d'auteur chez Cédric Grolet ou Pierre Hermé pour une pause gourmande."
+        ]
+      },
+      {
+        "title": "Moments d'exception",
+        "items": [
+          "Assistez à un concert intimiste au cœur d'une église du Marais.",
+          "Terminez la soirée par une croisière nocturne sur la Seine pour admirer les monuments illuminés."
+        ]
+      }
+    ],
+    "experiences": [
+      {
+        "id": "louvre",
+        "title": "Explorez le Louvre avec un guide expert",
+        "category": "Culture",
+        "duration": "3 heures",
+        "description": "Découvrez les salles emblématiques et les histoires méconnues du plus grand musée du monde.",
+        "image": "https://images.unsplash.com/photo-1529429617124-aee861a605ce?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "id": "passages",
+        "title": "Balade gourmande dans les passages couverts",
+        "category": "Gastronomie",
+        "duration": "2 heures",
+        "description": "Rencontrez des artisans passionnés et goûtez des spécialités dans un cadre Belle Époque.",
+        "image": "https://images.unsplash.com/photo-1519923834699-ef0b7cde4714?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "id": "seine",
+        "title": "Croisière privée au coucher du soleil",
+        "category": "Romance",
+        "duration": "90 minutes",
+        "description": "Naviguez sur la Seine à bord d'un bateau privatisé avec dégustation de champagne.",
+        "image": "https://images.unsplash.com/photo-1471115853179-bb1d604434e0?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Anaïs",
+        "rating": 5,
+        "title": "Des découvertes à chaque coin de rue",
+        "content": "Entre les musées et les petites adresses de quartier, on ne s'ennuie jamais. Mention spéciale aux balades guidées, très immersives !"
+      },
+      {
+        "author": "Marc",
+        "rating": 4,
+        "title": "Une énergie unique",
+        "content": "La ville est magique, même si l'affluence touristique peut être intense. Les conseils transports nous ont fait gagner un temps précieux."
+      }
+    ],
+    "coordinates": { "lat": 48.8566, "lng": 2.3522 }
+  },
+  {
+    "slug": "lisbonne",
+    "name": "Lisbonne",
+    "country": "Portugal",
+    "heroImage": "https://images.unsplash.com/photo-1524169163240-0f6c1f1cb1fa?auto=format&fit=crop&w=1600&q=80",
+    "summary": "Ville solaire aux ruelles pavées, Lisbonne mêle douceur de vivre, panoramas saisissants et culture vibrante.",
+    "highlights": [
+      {
+        "title": "Panoramas iconiques",
+        "description": "Grimpez aux miradouros pour admirer les toits colorés qui plongent vers le Tage.",
+        "icon": "🌅"
+      },
+      {
+        "title": "Quartiers bohèmes",
+        "description": "Alfama et Bairro Alto oscillent entre traditions et nuits animées, au son du fado.",
+        "icon": "🎶"
+      },
+      {
+        "title": "Cuisine de la mer",
+        "description": "Pastéis de nata, poisson grillé et vins blancs : une gastronomie iodée et généreuse.",
+        "icon": "🐟"
+      }
+    ],
+    "quickFacts": [
+      { "label": "Population", "value": "505 000 habitants" },
+      { "label": "Meilleure période", "value": "Mars à juin & septembre" },
+      { "label": "Budget journalier", "value": "€70 - €140" }
+    ],
+    "practical": [
+      {
+        "title": "Se déplacer",
+        "items": [
+          "Privilégiez la Lisboa Card pour les transports illimités et l'accès à 38 attractions.",
+          "Les tramways historiques sont pittoresques mais prisés : optez pour les lignes moins connues ou un départ tôt le matin."
+        ]
+      },
+      {
+        "title": "Incontournables",
+        "items": [
+          "Visitez Belém en combinant le monastère des Hiéronymites et la Tour de Belém.",
+          "Programmez une excursion d'une journée à Sintra pour ses palais féeriques."
+        ]
+      },
+      {
+        "title": "Moments d'exception",
+        "items": [
+          "Assistez à un concert de fado dans une maison traditionnelle d'Alfama.",
+          "Réservez un coucher de soleil en voilier sur le Tage."
+        ]
+      }
+    ],
+    "experiences": [
+      {
+        "id": "tram28",
+        "title": "Balade guidée en tramway 28 et ruelles secrètes",
+        "category": "Culture",
+        "duration": "3 heures",
+        "description": "Découvrez les points d'intérêt du trajet historique et les ateliers cachés d'artisans.",
+        "image": "https://images.unsplash.com/photo-1470294402047-6a1766d0ff4b?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "id": "azulejos",
+        "title": "Atelier d'azulejos avec une artiste locale",
+        "category": "Créativité",
+        "duration": "2 heures",
+        "description": "Peignez votre propre azulejo et repartez avec un souvenir personnalisé.",
+        "image": "https://images.unsplash.com/photo-1505761671935-60b3a7427bad?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "id": "tage",
+        "title": "Croisière gourmande sur le Tage",
+        "category": "Gastronomie",
+        "duration": "2 heures",
+        "description": "Dégustez des spécialités portugaises accompagnées de vins locaux au fil de l'eau.",
+        "image": "https://images.unsplash.com/photo-1548588684-8e8ca3e22b4c?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Inès",
+        "rating": 5,
+        "title": "Un city-trip tout en douceur",
+        "content": "Les panoramas au coucher du soleil sont inoubliables et les suggestions d'expériences étaient parfaitement adaptées."
+      },
+      {
+        "author": "Théo",
+        "rating": 4,
+        "title": "Gastronomie au rendez-vous",
+        "content": "On a adoré les recommandations culinaires, surtout la croisière gourmande ! Une ou deux activités supplémentaires le soir seraient un plus."
+      }
+    ],
+    "coordinates": { "lat": 38.7223, "lng": -9.1393 }
+  },
+  {
+    "slug": "kyoto",
+    "name": "Kyoto",
+    "country": "Japon",
+    "heroImage": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&q=80",
+    "summary": "Entre temples millénaires et cafés créatifs, Kyoto révèle l'équilibre parfait entre traditions et modernité.",
+    "highlights": [
+      {
+        "title": "Spiritualité en pleine nature",
+        "description": "Ressentez la quiétude des sanctuaires nichés au cœur des forêts de bambous.",
+        "icon": "🎋"
+      },
+      {
+        "title": "Artisanat d'exception",
+        "description": "Kimonos, céramiques et wagashi : rencontrez les artisans qui perpétuent les gestes ancestraux.",
+        "icon": "🧵"
+      },
+      {
+        "title": "Cuisine kaiseki",
+        "description": "Initiation gourmande aux menus dégustation saisonniers sublimant les ingrédients locaux.",
+        "icon": "🍱"
+      }
+    ],
+    "quickFacts": [
+      { "label": "Population", "value": "1,5 M d'habitants" },
+      { "label": "Meilleure période", "value": "Mars-avril & octobre-novembre" },
+      { "label": "Budget journalier", "value": "¥13 000 - ¥22 000" }
+    ],
+    "practical": [
+      {
+        "title": "Se déplacer",
+        "items": [
+          "Louez un vélo pour explorer les quartiers historiques le long de la rivière Kamo.",
+          "Le pass bus + métro 2 jours est idéal pour rayonner entre sites incontournables."
+        ]
+      },
+      {
+        "title": "Incontournables",
+        "items": [
+          "Réveillez-vous tôt pour profiter du sanctuaire Fushimi Inari avant les foules.",
+          "Réservez une cérémonie du thé privée pour comprendre les codes de l'hospitalité japonaise."
+        ]
+      },
+      {
+        "title": "Moments d'exception",
+        "items": [
+          "Participez à un dîner kaiseki accompagné d'une geiko dans le quartier de Gion.",
+          "Offrez-vous une retraite bien-être dans un ryokan avec onsen."
+        ]
+      }
+    ],
+    "experiences": [
+      {
+        "id": "fushimi",
+        "title": "Randonnée photographique à Fushimi Inari",
+        "category": "Nature",
+        "duration": "3 heures",
+        "description": "Explorez les sentiers moins fréquentés du sanctuaire et capturez les meilleures lumières.",
+        "image": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "id": "wagashi",
+        "title": "Atelier wagashi et cérémonie du thé",
+        "category": "Culture",
+        "duration": "2 heures",
+        "description": "Façonnez vos propres douceurs japonaises avant de participer à un rituel du thé guidé.",
+        "image": "https://images.unsplash.com/photo-1573878735868-8f942b4d3966?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "id": "arashiyama",
+        "title": "Balade guidée à vélo à Arashiyama",
+        "category": "Aventure",
+        "duration": "3 heures",
+        "description": "Traversez les forêts de bambous et les villages pittoresques aux côtés d'un guide local.",
+        "image": "https://images.unsplash.com/photo-1565259905541-95a6020be2b3?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Sakura",
+        "rating": 5,
+        "title": "Un équilibre parfait",
+        "content": "Les recommandations d'activités respectent à la fois la nature du lieu et notre rythme. Mention spéciale aux ateliers artisanaux."
+      },
+      {
+        "author": "Paul",
+        "rating": 5,
+        "title": "Kyoto autrement",
+        "content": "Nous avons apprécié les suggestions hors des sentiers battus. Les filtres par catégorie sont super pratiques pour organiser son planning."
+      }
+    ],
+    "coordinates": { "lat": 35.0116, "lng": 135.7681 }
+  }
+]
