@@ -17,6 +17,10 @@ GOOGLE_API_KEY="<votre-cle>" node scripts/updatePlaces.mjs <ville> [pays]
 | `GOOGLE_MAX_PAGES` | Nombre maximum de pages Text Search à parcourir. | `3` |
 | `GOOGLE_LANGUAGE` | Langue préférée pour les résultats (code BCP 47). | `fr` |
 
+La langue définie via `GOOGLE_LANGUAGE` est transmise aux requêtes **Text Search** et **Place Details** afin de maximiser la cohérence des intitulés et adresses.
+
+> 💡 Définissez `GOOGLE_MAX_PAGES` à `0` (ou `unlimited`) pour désactiver la limite et parcourir toutes les pages retournées par l'API.
+
 ## Typologie des lieux
 
 Le mapping entre les types Google et les catégories internes est défini dans [`scripts/placeTypeMap.js`](placeTypeMap.js). Modifiez-le pour ajuster les catégories éditoriales.
@@ -27,5 +31,5 @@ Le script normalise chaque résultat Google et le fusionne avec les activités e
 
 ## Journalisation
 
-Chaque exécution consigne dans la sortie standard les ajouts, mises à jour et les entrées ignorées. En cas de dépassement de quota, le script se met en pause pendant la durée recommandée avant de reprendre.
+Chaque exécution consigne dans la sortie standard les ajouts, mises à jour et les entrées ignorées. En cas de dépassement de quota, le script temporise avant de relancer la requête.
 

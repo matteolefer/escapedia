@@ -9,10 +9,34 @@ import typeMapModule from './placeTypeMap.js';
 
 const { mapPlaceTypesToCategory, FALLBACK_CATEGORY } = typeMapModule;
 
-const TEXT_SEARCH_DELAY_MS = Number(process.env.GOOGLE_TEXT_DELAY_MS ?? 250);
-const DETAILS_DELAY_MS = Number(process.env.GOOGLE_DETAILS_DELAY_MS ?? 250);
-const PHOTO_DELAY_MS = Number(process.env.GOOGLE_PHOTO_DELAY_MS ?? 800);
+function parseNumber(value, fallback) {
+  if (value === undefined || value === null || value === '') {
+    return fallback;
+  }
+
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
+}
+
+function parsePositiveInt(value, fallback) {
+  if (value === undefined || value === null || value === '') {
+    return fallback;
+  }
+
+  const parsed = Number.parseInt(value, 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+const TEXT_SEARCH_DELAY_MS = parseNumber(process.env.GOOGLE_TEXT_DELAY_MS, 1000);
+const DETAILS_DELAY_MS = parseNumber(process.env.GOOGLE_DETAILS_DELAY_MS, 1000);
+const PHOTO_DELAY_MS = parseNumber(process.env.GOOGLE_PHOTO_DELAY_MS, 1500);
 const NEXT_PAGE_DELAY_MS = 2000;
+const rawMaxPagesEnv = process.env.GOOGLE_MAX_PAGES;
+const MAX_TEXT_SEARCH_PAGES =
+  rawMaxPagesEnv && ['0', 'all', 'inf', 'infinite', 'infinity', 'unlimited'].includes(rawMaxPagesEnv.trim().toLowerCase())
+    ? Infinity
+    : parsePositiveInt(rawMaxPagesEnv, 3);
+const LANGUAGE = (process.env.GOOGLE_LANGUAGE ?? 'fr').trim() || 'fr';
 
 const SEARCH_QUERIES = ['museums', 'monuments', 'restaurants', 'parks'];
 
@@ -107,10 +131,12 @@ async function fetchJsonWithRetry(url, description, delayMs) {
 async function fetchTextSearchResults(query, apiKey) {
   const results = [];
   let pageToken = null;
+  let pageIndex = 0;
 
-  do {
+  while (true) {
     const url = new URL('https://maps.googleapis.com/maps/api/place/textsearch/json');
     url.searchParams.set('key', apiKey);
+    url.searchParams.set('language', LANGUAGE);
     if (pageToken) {
       url.searchParams.set('pagetoken', pageToken);
     } else {
@@ -118,6 +144,18 @@ async function fetchTextSearchResults(query, apiKey) {
     }
 
     const payload = await fetchJsonWithRetry(url.toString(), `Text search for ${query}`, TEXT_SEARCH_DELAY_MS);
+
+    if (payload.status === 'OVER_QUERY_LIMIT') {
+      console.warn(`Quota reached while fetching "${query}". Waiting ${NEXT_PAGE_DELAY_MS}ms before retrying...`);
+      await delay(NEXT_PAGE_DELAY_MS);
+      continue;
+    }
+
+    if (payload.status === 'INVALID_REQUEST' && pageToken) {
+      console.warn(`Next page token not ready for "${query}" yet. Retrying in ${NEXT_PAGE_DELAY_MS}ms...`);
+      await delay(NEXT_PAGE_DELAY_MS);
+      continue;
+    }
 
     if (payload.status !== 'OK' && payload.status !== 'ZERO_RESULTS') {
       console.warn(`Google Places Text Search returned status "${payload.status}" for query "${query}".`);
@@ -128,13 +166,22 @@ async function fetchTextSearchResults(query, apiKey) {
       results.push(...payload.results);
     }
 
-    if (payload.next_page_token) {
-      pageToken = payload.next_page_token;
-      await delay(NEXT_PAGE_DELAY_MS);
-    } else {
-      pageToken = null;
+    if (payload.status === 'ZERO_RESULTS') {
+      break;
     }
-  } while (pageToken);
+
+    pageIndex += 1;
+
+    const nextPageToken = payload.next_page_token;
+    const hasReachedLimit = Number.isFinite(MAX_TEXT_SEARCH_PAGES) && pageIndex >= MAX_TEXT_SEARCH_PAGES;
+
+    if (!nextPageToken || hasReachedLimit) {
+      break;
+    }
+
+    pageToken = nextPageToken;
+    await delay(NEXT_PAGE_DELAY_MS);
+  }
 
   return results;
 }
@@ -147,6 +194,7 @@ async function fetchPlaceDetails(placeId, apiKey) {
     'fields',
     'place_id,name,types,formatted_address,geometry/location,rating,user_ratings_total,business_status,photos'
   );
+  url.searchParams.set('language', LANGUAGE);
 
   const payload = await fetchJsonWithRetry(url.toString(), `Details for ${placeId}`, DETAILS_DELAY_MS);
   if (payload.status !== 'OK') {
@@ -314,7 +362,9 @@ async function main() {
   const output = `${JSON.stringify(sortedCities, null, 2)}\n`;
   await fs.writeFile(DATA_PATH, output, 'utf8');
 
-  console.info(`Completed update for ${targetCity.name}. Added ${additions.length} place(s), updated ${updates.length} existing entrie(s).`);
+  console.info(
+    `Completed update for ${targetCity.name}. Added ${additions.length} place(s), updated ${updates.length} existing entries.`
+  );
 }
 
 main().catch((error) => {
