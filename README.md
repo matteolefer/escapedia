@@ -80,6 +80,16 @@ Les objets listés dans `experiences` peuvent désormais stocker des métadonné
 - **Identifiant lieu (`placeId`)** : privilégiez l'identifiant Google Places lorsque disponible pour éviter les doublons lors des synchronisations.
 - **Source** : conservez la provenance des données (`name`, `url`, `retrievedAt`) pour faciliter les mises à jour ultérieures.
 
+## Scripts utilitaires
+
+Un script Node.js permet d'enrichir automatiquement les expériences avec les métadonnées Google Places :
+
+```bash
+GOOGLE_API_KEY="votre-cle" node scripts/updatePlaces.mjs <ville> [pays]
+```
+
+Consultez la documentation dédiée dans [scripts/updatePlaces.md](scripts/updatePlaces.md) pour comprendre les options disponibles et les bonnes pratiques d'exécution.
+
 ## Accessibilité & bonnes pratiques
 
 - Contrastes vérifiés pour répondre aux recommandations WCAG AA.
