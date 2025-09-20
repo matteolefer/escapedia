@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Escapedia : découvrez des inspirations de city-break et des expériences sur-mesure." />
+    <title>Escapedia — Inspirez vos prochaines échappées</title>
+    <link rel="stylesheet" href="src/styles/theme.css" />
+    <link rel="stylesheet" href="src/styles/global.css" />
+    <link rel="stylesheet" href="src/styles/home.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="site-header__brand" href="index.html">Escapedia</a>
+        <nav aria-label="Navigation principale">
+          <a class="button button--ghost" href="#cities">Explorer les villes</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero__background" aria-hidden="true"></div>
+        <div class="container hero__content">
+          <div>
+            <span class="hero__eyebrow">City breaks curatés</span>
+            <h1 class="hero__title">Redonnez du relief à vos escapades urbaines</h1>
+            <p class="hero__description">
+              Escapedia vous aide à composer des séjours mémorables grâce à une sélection d'expériences authentiques,
+              de conseils pratiques et d'adresses responsables.
+            </p>
+            <div class="hero__actions">
+              <a class="button button--primary" href="#cities">Voir les destinations</a>
+              <a class="button button--ghost" href="#promesse">Notre promesse</a>
+            </div>
+          </div>
+          <div class="card" aria-label="Statistiques clés d'Escapedia">
+            <h2 style="margin-top: 0; font-family: var(--font-heading);">Vos aventures, notre expertise</h2>
+            <ul style="list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-md);">
+              <li>
+                <strong style="font-size: var(--text-2xl);">35+</strong>
+                <p class="text-muted">destinations méticuleusement documentées et illustrées</p>
+              </li>
+              <li>
+                <strong style="font-size: var(--text-2xl);">120</strong>
+                <p class="text-muted">expériences testées sur place par nos explorateurs</p>
+              </li>
+              <li>
+                <strong style="font-size: var(--text-2xl);">96%</strong>
+                <p class="text-muted">de voyageurs recommandent Escapedia à leur entourage</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="promesse" class="home-section">
+        <div class="container">
+          <header>
+            <h2 class="section-title">Pourquoi choisir Escapedia ?</h2>
+            <p class="text-muted">
+              Nous combinons expertise locale, design et durabilité pour vous accompagner avant, pendant et après votre
+              voyage.
+            </p>
+          </header>
+          <div class="feature-grid">
+            <article class="feature-card">
+              <span class="feature-card__icon" aria-hidden="true">🗺️</span>
+              <h3>Guides immersifs</h3>
+              <p class="text-muted">Des contenus riches, illustrés et contextualisés pour chaque quartier.</p>
+            </article>
+            <article class="feature-card">
+              <span class="feature-card__icon" aria-hidden="true">🤝</span>
+              <h3>Communauté locale</h3>
+              <p class="text-muted">Des expériences co-créées avec des experts locaux et des artisans engagés.</p>
+            </article>
+            <article class="feature-card">
+              <span class="feature-card__icon" aria-hidden="true">🌿</span>
+              <h3>Voyages responsables</h3>
+              <p class="text-muted">Des recommandations qui valorisent la culture locale et minimisent l'impact.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="cities" class="home-section" aria-labelledby="cities-title">
+        <div class="container">
+          <div class="section__header">
+            <h2 id="cities-title" class="section-title">Destinations à l'honneur</h2>
+            <p class="text-muted">Cliquez sur une ville pour découvrir nos itinéraires, expériences et avis voyageurs.</p>
+          </div>
+          <div data-fetch-status class="text-muted">Chargement des villes…</div>
+          <div class="city-grid" data-city-grid></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container site-footer__content">
+        <p>© <span id="current-year"></span> Escapedia. Tous droits réservés.</p>
+        <nav aria-label="Liens secondaires">
+          <a href="#promesse">Notre approche</a> ·
+          <a href="mailto:contact@escapedia.com">Contact</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script type="module" src="src/scripts/main.js"></script>
+    <script>
+      document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Préparez une escapade mémorable avec Escapedia." />
+    <title>Ville | Escapedia</title>
+    <link rel="stylesheet" href="src/styles/theme.css" />
+    <link rel="stylesheet" href="src/styles/global.css" />
+    <link rel="stylesheet" href="src/styles/city.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="site-header__brand" href="index.html">Escapedia</a>
+        <nav aria-label="Navigation principale">
+          <a class="button button--ghost" href="index.html#cities">Retour aux villes</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="city-root">
+      <section class="page-header">
+        <div class="container">
+          <nav class="breadcrumbs" aria-label="Fil d'Ariane">
+            <a href="index.html">Accueil</a>
+            <span aria-hidden="true">›</span>
+            <span data-breadcrumb-current>Ville</span>
+          </nav>
+          <div class="page-header__inner">
+            <div>
+              <div class="page-header__meta" data-city-meta></div>
+              <h1 class="page-header__title" data-city-name>Ville</h1>
+              <p class="page-header__summary" data-city-summary>
+                Nous préparons une sélection d'expériences personnalisées pour cette destination.
+              </p>
+              <ul class="quick-facts" data-quick-facts></ul>
+            </div>
+            <div class="page-header__image">
+              <img data-city-image src="https://placehold.co/800x600?text=Escapedia" alt="" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="highlights-title">
+        <div class="container">
+          <header class="section__header">
+            <h2 id="highlights-title" class="section-title">Essentiels à vivre</h2>
+            <p class="text-muted">
+              Une sélection de moments forts pour saisir la personnalité de la destination.
+            </p>
+          </header>
+          <ul class="highlights-list" data-highlights></ul>
+        </div>
+      </section>
+
+      <section class="section section--surface" aria-labelledby="practical-title">
+        <div class="container">
+          <header class="section__header">
+            <h2 id="practical-title" class="section-title">Conseils pratiques</h2>
+            <p class="text-muted">Optimisez votre séjour grâce à nos astuces et recommandations terrain.</p>
+          </header>
+          <div class="practical-grid" data-practical></div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="experiences-title">
+        <div class="container">
+          <header class="section__header">
+            <h2 id="experiences-title" class="section-title">Expériences curatoriales</h2>
+            <p class="text-muted">
+              Filtrez par thématique pour composer un programme à votre image.
+            </p>
+          </header>
+          <div class="filter-group" role="group" aria-label="Filtrer les expériences" data-experience-filters></div>
+          <div class="experiences-grid" data-experiences></div>
+        </div>
+      </section>
+
+      <section class="section section--surface" aria-labelledby="reviews-title">
+        <div class="container">
+          <header class="section__header">
+            <h2 id="reviews-title" class="section-title">Ils nous font confiance</h2>
+            <p class="text-muted">Avis authentiques de voyageurs ayant testé nos recommandations.</p>
+          </header>
+          <div class="reviews-grid" data-reviews></div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="map-title">
+        <div class="container">
+          <header class="section__header">
+            <h2 id="map-title" class="section-title">Situer la destination</h2>
+            <p class="text-muted">
+              Explorez la ville sur la carte et repérez les quartiers mis à l'honneur.
+            </p>
+          </header>
+          <iframe
+            class="city-map"
+            data-city-map
+            title="Carte de la destination"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            sandbox="allow-scripts allow-same-origin allow-popups"
+          ></iframe>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container site-footer__content">
+        <p>© <span id="current-year"></span> Escapedia.</p>
+        <nav aria-label="Liens secondaires">
+          <a href="mailto:contact@escapedia.com">Contact</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script type="module" src="src/scripts/city.js"></script>
+    <script>
+      document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
