@@ -150,6 +150,49 @@ function renderExperiences(city) {
   const categories = getUniqueCategories(city);
   let activeCategory = categories[0];
 
+  const numberFormatter = new Intl.NumberFormat('fr-FR');
+
+  function createMetaItem(label, value, fallback) {
+    const span = document.createElement('span');
+    span.className = 'experience-card__meta-item';
+
+    const labelNode = document.createElement('span');
+    labelNode.className = 'experience-card__meta-label';
+    labelNode.textContent = label;
+
+    const valueNode = document.createElement('strong');
+    valueNode.className = 'experience-card__meta-value';
+
+    if (value == null || value === '') {
+      span.classList.add('experience-card__meta-item--placeholder');
+      valueNode.classList.add('experience-card__meta-value--placeholder');
+      valueNode.textContent = fallback;
+    } else {
+      valueNode.textContent = value;
+    }
+
+    span.append(labelNode, valueNode);
+    return span;
+  }
+
+  function addDetail(container, label, value, isPlaceholder = false) {
+    const dt = document.createElement('dt');
+    dt.textContent = label;
+
+    const dd = document.createElement('dd');
+    if (value instanceof Node) {
+      dd.appendChild(value);
+    } else {
+      dd.textContent = value;
+    }
+
+    if (isPlaceholder) {
+      dd.classList.add('experience-card__details-value--placeholder');
+    }
+
+    container.append(dt, dd);
+  }
+
   function updateActive(category) {
     activeCategory = category;
     Array.from(filterGroup.children).forEach((button) => {
@@ -177,25 +220,94 @@ function renderExperiences(city) {
       const card = document.createElement('article');
       card.className = 'experience-card';
 
-      const image = document.createElement('img');
-      image.src = experience.image;
-      image.alt = experience.title;
-      image.loading = 'lazy';
+      if (experience.placeId) {
+        card.dataset.placeId = experience.placeId;
+      }
+
+      const elements = [];
+
+      const imageSource = experience.imageUrl || experience.image;
+      if (imageSource) {
+        const image = document.createElement('img');
+        image.src = imageSource;
+        image.alt = experience.title;
+        image.loading = 'lazy';
+        image.decoding = 'async';
+        image.className = 'experience-card__image';
+        elements.push(image);
+      }
+
+      const header = document.createElement('div');
+      header.className = 'experience-card__header';
 
       const title = document.createElement('h3');
       title.textContent = experience.title;
 
+      const statusBadge = document.createElement('span');
+      statusBadge.className = 'experience-card__status';
+      const statusText = experience.status || 'Statut à confirmer';
+      statusBadge.textContent = statusText;
+
+      const normalizedStatus = statusText.toLowerCase();
+      if (normalizedStatus.includes('ouvert') || normalizedStatus.includes('disponible')) {
+        statusBadge.classList.add('experience-card__status--success');
+      } else if (
+        normalizedStatus.includes('ferm') ||
+        normalizedStatus.includes('complet') ||
+        normalizedStatus.includes('indisponible')
+      ) {
+        statusBadge.classList.add('experience-card__status--warning');
+      }
+
+      header.append(title, statusBadge);
+      elements.push(header);
+
       const meta = document.createElement('div');
       meta.className = 'experience-card__meta';
-      const category = document.createElement('span');
-      category.innerHTML = `Catégorie : <strong>${experience.category}</strong>`;
-      const duration = document.createElement('span');
-      duration.innerHTML = `Durée : <strong>${experience.duration}</strong>`;
+      const category = createMetaItem('Catégorie', experience.category, 'Non définie');
+      const duration = createMetaItem('Durée', experience.duration, 'À préciser');
       meta.append(category, duration);
+      elements.push(meta);
 
       const description = document.createElement('p');
       description.textContent = experience.description;
       description.className = 'text-muted';
+
+      elements.push(description);
+
+      const details = document.createElement('dl');
+      details.className = 'experience-card__details';
+
+      const hasAddress = Boolean(experience.address);
+      addDetail(details, 'Adresse', hasAddress ? experience.address : 'Non communiquée', !hasAddress);
+
+      if (typeof experience.rating === 'number') {
+        let ratingText = `${experience.rating.toFixed(1)} / 5`;
+        if (typeof experience.ratingsTotal === 'number' && experience.ratingsTotal > 0) {
+          ratingText += ` · ${numberFormatter.format(experience.ratingsTotal)} avis`;
+        }
+        addDetail(details, 'Note', ratingText);
+      } else {
+        addDetail(details, 'Note', 'Non disponible', true);
+      }
+
+      const hasCoordinates =
+        typeof experience.latitude === 'number' && typeof experience.longitude === 'number';
+
+      if (hasCoordinates) {
+        const mapLink = document.createElement('a');
+        mapLink.href = `https://www.google.com/maps/search/?api=1&query=${experience.latitude},${experience.longitude}`;
+        mapLink.target = '_blank';
+        mapLink.rel = 'noopener';
+        mapLink.className = 'experience-card__map-link';
+        mapLink.textContent = 'Voir sur la carte';
+        mapLink.setAttribute('aria-label', `Voir ${experience.title} sur la carte`);
+        addDetail(details, 'Localisation', mapLink);
+      } else {
+        addDetail(details, 'Localisation', 'Lien non disponible', true);
+      }
+
+      elements.push(details);
 
       const cta = document.createElement('a');
       cta.href = `mailto:contact@escapedia.com?subject=${encodeURIComponent(
@@ -205,7 +317,9 @@ function renderExperiences(city) {
       cta.textContent = 'En savoir plus';
       cta.setAttribute('aria-label', `En savoir plus sur ${experience.title}`);
 
-      card.append(image, title, meta, description, cta);
+      elements.push(cta);
+
+      card.append(...elements);
       grid.appendChild(card);
     });
   }
