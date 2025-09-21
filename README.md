@@ -90,6 +90,24 @@ GOOGLE_API_KEY="votre-cle" node scripts/updatePlaces.mjs <ville> [pays]
 
 Consultez la documentation dédiée dans [scripts/updatePlaces.md](scripts/updatePlaces.md) pour comprendre les options disponibles et les bonnes pratiques d'exécution.
 
+## Tests manuels
+
+### Basculement Overpass
+
+- Lancez une synchronisation avec Overpass en ciblant la ville souhaitée :
+
+  ```bash
+  GOOGLE_API_KEY="votre-cle" node scripts/updatePlaces.mjs <ville> [pays]
+  ```
+
+- Exemple :
+
+  ```bash
+  GOOGLE_API_KEY="votre-cle" node scripts/updatePlaces.mjs paris france
+  ```
+
+Le script nécessite au minimum un argument de ville pour démarrer la synchronisation ; ajoutez le pays pour lever toute ambiguïté lors de la recherche.
+
 ## Accessibilité & bonnes pratiques
 
 - Contrastes vérifiés pour répondre aux recommandations WCAG AA.
