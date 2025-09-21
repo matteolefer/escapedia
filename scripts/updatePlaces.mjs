@@ -9,6 +9,7 @@ const ROOT_DIR = path.resolve(__dirname, '..');
 const CITIES_PATH = path.resolve(ROOT_DIR, 'src', 'data', 'cities.json');
 
 const fetchApi = globalThis.fetch;
+const USER_AGENT = 'escapedia-updatePlaces/1.0 (+https://openstreetmap.org)';
 
 if (typeof fetchApi !== 'function') {
   console.error('[updatePlaces] Cette version de Node.js ne fournit pas l\'API fetch. Utilisez Node 18+ ou installez node-fetch.');
@@ -55,11 +56,12 @@ async function updateCityPlaces(cityArg, countryArg) {
   targetCity.experiences ??= [];
 
   const locationLabel = buildLocationLabel(cityArg, countryArg);
+  console.log(`[updatePlaces] Résolution de la zone Overpass via Nominatim pour ${locationLabel}.`);
   console.log(
     `[updatePlaces] Recherche de nouvelles expériences pour ${targetCity.name} via Overpass (${locationLabel}).`
   );
 
-  const query = buildOverpassQuery(cityArg, countryArg);
+  const query = await buildOverpassQuery(cityArg, countryArg);
   const overpassElements = await requestOverpassData(query);
 
   if (!overpassElements.length) {
@@ -89,7 +91,7 @@ async function requestOverpassData(query) {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
         Accept: 'application/json',
-        'User-Agent': 'escapedia-updatePlaces/1.0 (+https://openstreetmap.org)'
+        'User-Agent': USER_AGENT
       },
       body: `data=${encodeURIComponent(query)}`
     });
@@ -221,7 +223,7 @@ function buildLocationLabel(city, country) {
   return trimmedCountry ? `${trimmedCity}, ${trimmedCountry}` : trimmedCity;
 }
 
-function buildOverpassQuery(city, country) {
+async function buildOverpassQuery(city, country) {
   const location = buildLocationLabel(city, country);
   const categories = ['tourism', 'amenity', 'leisure', 'historic', 'shop', 'sport', 'natural'];
   const selectors = categories
@@ -229,15 +231,90 @@ function buildOverpassQuery(city, country) {
     .flat();
 
   const sanitizedLocation = location.replace(/[\n\r]+/g, ' ').trim();
+  const areaId = await resolveOverpassAreaId(city, country);
+
+  if (!areaId) {
+    throw new Error(
+      `Impossible de déterminer une zone Overpass pour ${sanitizedLocation}. Vérifiez l'orthographe ou précisez le pays.`
+    );
+  }
 
   return [
     '[out:json][timeout:25];',
-    `{{geocodeArea:${sanitizedLocation}}}->.searchArea;`,
+    `area(${areaId})->.searchArea;`,
     '(',
     selectors.join('\n'),
     ');',
     'out center 40;'
   ].join('\n');
+}
+
+async function resolveOverpassAreaId(city, country) {
+  const location = buildLocationLabel(city, country);
+  const params = new URLSearchParams({
+    q: location,
+    format: 'jsonv2',
+    addressdetails: '0',
+    extratags: '0',
+    polygon_geojson: '0',
+    limit: '1'
+  });
+
+  let response;
+  try {
+    response = await fetchApi(`https://nominatim.openstreetmap.org/search?${params.toString()}`, {
+      headers: {
+        Accept: 'application/json',
+        'User-Agent': USER_AGENT
+      }
+    });
+  } catch (error) {
+    throw new Error(`Résolution de la zone via Nominatim indisponible : ${error.message}`, { cause: error });
+  }
+
+  if (!response.ok) {
+    let detail = '';
+    try {
+      const text = await response.text();
+      if (text && text.trim().length) {
+        detail = ` : ${text.trim()}`;
+      }
+    } catch (error) {
+      // Ignore body parsing errors and keep the HTTP status message only.
+    }
+    throw new Error(`Résolution de la zone via Nominatim échouée (${response.status} ${response.statusText})${detail}`);
+  }
+
+  const payload = await response.json();
+  if (!Array.isArray(payload) || payload.length === 0) {
+    return null;
+  }
+
+  const place = payload[0];
+  const osmType = typeof place.osm_type === 'string' ? place.osm_type.toLowerCase() : '';
+  const osmId = Number.parseInt(place.osm_id, 10);
+
+  if (!osmType || !Number.isFinite(osmId)) {
+    return null;
+  }
+
+  return toOverpassAreaId(osmType, osmId);
+}
+
+function toOverpassAreaId(osmType, osmId) {
+  if (!osmType || !Number.isFinite(osmId)) {
+    return null;
+  }
+
+  if (osmType === 'relation') {
+    return 3600000000 + osmId;
+  }
+
+  if (osmType === 'way') {
+    return 2400000000 + osmId;
+  }
+
+  return null;
 }
 
 function extractTypes(tags = {}) {

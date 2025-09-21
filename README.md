@@ -88,6 +88,10 @@ Un script Node.js permet d'enrichir automatiquement les expériences avec les m�
 GOOGLE_API_KEY="votre-cle" node scripts/updatePlaces.mjs <ville> [pays]
 ```
 
+Le script s'appuie désormais sur Nominatim pour résoudre la zone Overpass correspondant à la ville demandée avant d'envoyer la
+requête. En cas d'ambiguïté ou d'échec de la résolution, l'exécution s'interrompt avec un message explicite : n'hésitez pas à
+ajouter le pays pour lever toute ambiguïté.
+
 Consultez la documentation dédiée dans [scripts/updatePlaces.md](scripts/updatePlaces.md) pour comprendre les options disponibles et les bonnes pratiques d'exécution.
 
 ## Tests manuels
